@@ -4,5 +4,6 @@
     <string name="app_name">Погодная станция</string>
     <string name="temperature">+30</string>
     <string name="city">Санкт-Петербург</string>
+    <string name="enterCity">Введите город...</string>
 
 </resources>

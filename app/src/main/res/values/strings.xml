@@ -2,4 +2,6 @@
     <string name="app_name">Show me the weather</string>
     <string name="temperature">+30</string>
     <string name="city">Saint-Petersburg</string>
+    <string name="enterCity">Enter name of the city...</string>
+
 </resources>
