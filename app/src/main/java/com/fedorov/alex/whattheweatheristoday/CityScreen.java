@@ -8,8 +8,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class CityScreen extends AppCompatActivity {
-
+    private String city;
     public final static String NEW_CITY = "NEW_CITY";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,22 +19,24 @@ public class CityScreen extends AppCompatActivity {
 
         // Получаем сообщение из объекта intent
         Intent intent = getIntent();
-        String city = intent.getStringExtra(MainActivity.PREV_CITY);
+        city = intent.getStringExtra(MainActivity.PREV_CITY);
 
         EditText cityView = findViewById(R.id.cityInput);
         cityView.setText(city);
     }
 
+
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
 
-        TextView city = findViewById(R.id.cityInput);
+        TextView cityView = findViewById(R.id.cityInput);
 
-        String cityNew = city.getText().toString();
+        city = cityView.getText().toString();
 
-        intent.putExtra(NEW_CITY, cityNew);
-        // запуск activity
-        startActivity(intent);
+        Intent intent = new Intent();
+        intent.putExtra(NEW_CITY, city);
+        setResult(RESULT_OK, intent);
+
+        super.onBackPressed();
     }
 }

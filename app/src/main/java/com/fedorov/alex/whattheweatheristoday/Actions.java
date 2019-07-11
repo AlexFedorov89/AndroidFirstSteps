@@ -9,14 +9,11 @@ public class Actions {
     private final static String TAG = "Actions";
 
     public static void setWeather(TextView temperature, ImageView weatherImage, String temp, int imageResource) {
-//        TextView temperature = (TextView) findViewById(R.id.temperature);
         if (temp != null)
             temperature.setText(temp);
         else {
             Log.d(TAG, "Error. Not found TextView with id = 'temperature'");
         }
-
-//        ImageView weatherImage = (ImageView) findViewById(R.id.weatherImage);
 
         if (weatherImage != null) {
             weatherImage.setImageResource(imageResource);
