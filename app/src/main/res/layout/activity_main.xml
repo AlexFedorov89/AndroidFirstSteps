@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:contentDescription="Image of weather"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/sunny" />
 
         <TextView

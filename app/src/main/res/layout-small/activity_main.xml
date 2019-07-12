@@ -30,10 +30,10 @@
 
         <ImageView
             android:id="@+id/weatherImage"
-            android:layout_width="157dp"
+            android:layout_width="match_parent"
             android:layout_height="122dp"
             android:contentDescription="Image of weather"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/sunny" />
 
         <TextView

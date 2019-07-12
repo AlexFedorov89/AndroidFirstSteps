@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="Image of weather"
                 android:drawingCacheQuality="auto"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/sunny" />
 
         </LinearLayout>
