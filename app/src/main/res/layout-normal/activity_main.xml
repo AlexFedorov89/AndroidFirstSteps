@@ -31,22 +31,23 @@
         <ImageView
             android:id="@+id/weatherImage"
             android:layout_width="match_parent"
-            android:layout_height="244dp"
+            android:layout_height="178dp"
             android:contentDescription="Image of weather"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/sunny" />
 
         <TextView
             android:id="@+id/temperature"
-            android:layout_width="90dp"
-            android:layout_height="59dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/temperature"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="50sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="93dp">
+            android:layout_height="77dp">
 
             <Button
                 android:id="@+id/sun_small"
@@ -111,9 +112,10 @@
 
         <TextView
             android:id="@+id/city"
-            android:layout_width="wrap_content"
-            android:layout_height="77dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/city"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="36sp" />
     </LinearLayout>

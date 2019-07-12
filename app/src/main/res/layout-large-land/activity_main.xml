@@ -44,14 +44,15 @@
 
             <TextView
                 android:id="@+id/temperature"
-                android:layout_width="193dp"
-                android:layout_height="178dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/temperature"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
-                android:textSize="100sp" />
+                android:textSize="150sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="621dp"
+                android:layout_width="match_parent"
                 android:layout_height="102dp">
 
                 <Button
@@ -117,9 +118,10 @@
 
             <TextView
                 android:id="@+id/city"
-                android:layout_width="600dp"
-                android:layout_height="129dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/city"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="70sp" />
         </LinearLayout>
