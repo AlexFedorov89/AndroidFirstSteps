@@ -5,5 +5,5 @@
     <string name="temperature">+30</string>
     <string name="city">Санкт-Петербург</string>
     <string name="enterCity">Введите город...</string>
-
+    <string name="cityHint">Получить информацию о городе на wiki</string>
 </resources>

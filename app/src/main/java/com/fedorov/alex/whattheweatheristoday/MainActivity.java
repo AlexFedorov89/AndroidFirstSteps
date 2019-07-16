@@ -4,34 +4,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import static android.content.Intent.ACTION_VIEW;
 
 
-    public final static String PREV_CITY = "PREV_CITY";
+public class MainActivity extends AppCompatActivity {
+
+
+    public final static String CITY = "CITY";
 
     private static final String TAG = "myLogs";
 
-    //TODO delete next lesson.
-    public final static String ON_CREATE = "onCreate()";
-    public final static String ON_START = "onStart()";
-    public final static String ON_RESUME = "onResume()";
-    public final static String ON_RESTART = "onRestart()";
-    public final static String ON_PAUSE = "onPause()";
-    public final static String ON_STOP = "onStop()";
-    public final static String ON_DESTROY = "onDestroy()";
-
     private final static DataCache dataCache = DataCache.getDataCache();
+    public static final int REQUEST_CODE = 1;
 
     TextView temperature;
     ImageView weatherImage;
     TextView cityView;
+
+    String currentCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setButtonsOnClickListener();
 
         setPreviousInstanceState();
-
-        //TODO delete next lesson.
-        showToastAndLog(ON_CREATE);
-
     }
 
-    private void showToastAndLog(String method) {
-        Toast.makeText(getApplicationContext(), method, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, method);
-    }
 
     private void setPreviousInstanceState() {
         String prevCity = dataCache.getCity();
@@ -75,27 +64,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setButtonsOnClickListener() {
-        findViewById(R.id.sun_small).setOnClickListener(this);
-        findViewById(R.id.cloud_small).setOnClickListener(this);
-        findViewById(R.id.rain_small).setOnClickListener(this);
-        findViewById(R.id.snow_small).setOnClickListener(this);
-        findViewById(R.id.btnSettings).setOnClickListener(this);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pushTheButton(view);
+            }
+        };
+
+        findViewById(R.id.sun_small).setOnClickListener(onClickListener);
+        findViewById(R.id.cloud_small).setOnClickListener(onClickListener);
+        findViewById(R.id.rain_small).setOnClickListener(onClickListener);
+        findViewById(R.id.snow_small).setOnClickListener(onClickListener);
+        findViewById(R.id.btnSettings).setOnClickListener(onClickListener);
+        findViewById(R.id.city).setOnClickListener(onClickListener);
     }
 
 
-    @Override
-    public void onClick(View view) {
+    public void pushTheButton(View view) {
         String currentTemp;
         int currentImgRes;
 
         switch (view.getId()) {
+            case R.id.city:
+                try {
+                    currentCity = cityView.getText().toString();
+                    Intent intent = new Intent(ACTION_VIEW, Uri.parse("https://ru.wikipedia.org/wiki/" + currentCity));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.d(TAG, e.getMessage());
+                }
+
+                break;
             case R.id.sun_small:
                 currentTemp = "+35";
                 currentImgRes = R.drawable.sunny;
                 dataCache.setTemp(currentTemp);
                 dataCache.setImageRes(currentImgRes);
 
-                Actions.setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
 
                 break;
             case R.id.cloud_small:
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dataCache.setTemp(currentTemp);
                 dataCache.setImageRes(currentImgRes);
 
-                Actions.setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
 
                 break;
 
@@ -114,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dataCache.setTemp(currentTemp);
                 dataCache.setImageRes(currentImgRes);
 
-                Actions.setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
 
                 break;
 
@@ -124,78 +130,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dataCache.setTemp(currentTemp);
                 dataCache.setImageRes(currentImgRes);
 
-                Actions.setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
 
                 break;
 
             case R.id.btnSettings:
-                Intent intent = new Intent(this, CityScreen.class);
+                Intent cityScreenIntent = new Intent(this, CityScreen.class);
 
-                String cityEx = cityView.getText().toString();
+                currentCity = cityView.getText().toString();
 
-                intent.putExtra(PREV_CITY, cityEx);
+                cityScreenIntent.putExtra(CITY, currentCity);
                 // запуск activity
-                startActivityForResult(intent, 1);
+                startActivityForResult(cityScreenIntent, REQUEST_CODE);
         }
     }
+
+    public static void setWeather(TextView temperature, ImageView weatherImage, String temp, int imageResource) {
+        if (temp != null)
+            temperature.setText(temp);
+        else {
+            Log.d(TAG, "Error. Not found TextView with id = 'temperature'");
+        }
+
+        if (weatherImage != null) {
+            weatherImage.setImageResource(imageResource);
+        } else {
+            Log.d(TAG, "Error. Not found ImageView with id = 'weatherImage'");
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode != REQUEST_CODE) {
+            super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null) {
+            return;
+        }
 
-            String city = data.getStringExtra(CityScreen.NEW_CITY);
+        if (resultCode == RESULT_OK && data != null) {
+            try {
+                String city = data.getStringExtra(CITY);
 
-            cityView.setText(city);
-            dataCache.setCity(city);
+                cityView.setText(city);
+                dataCache.setCity(city);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 
-    //TODO delete next lesson.
-    @Override
-    protected void onStart() {
-        showToastAndLog(ON_START);
-
-        super.onStart();
-    }
-
-    //TODO delete next lesson.
-    @Override
-    protected void onResume() {
-        showToastAndLog(ON_RESUME);
-
-        super.onResume();
-    }
-
-    //TODO delete next lesson.
-    @Override
-    protected void onRestart() {
-        showToastAndLog(ON_RESTART);
-
-        super.onRestart();
-    }
-
-    //TODO delete next lesson.
-    @Override
-    protected void onPause() {
-        showToastAndLog(ON_PAUSE);
-
-        super.onPause();
-    }
-
-    //TODO delete next lesson.
-    @Override
-    protected void onStop() {
-        showToastAndLog(ON_STOP);
-
-        super.onStop();
-    }
-
-    //TODO delete next lesson.
-    @Override
-    protected void onDestroy() {
-        showToastAndLog(ON_DESTROY);
-
-        super.onDestroy();
-    }
 }

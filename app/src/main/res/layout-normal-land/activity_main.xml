@@ -120,6 +120,7 @@
                 android:id="@+id/city"
                 android:layout_width="wrap_content"
                 android:layout_height="77dp"
+                android:hint="@string/cityHint"
                 android:text="@string/city"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
