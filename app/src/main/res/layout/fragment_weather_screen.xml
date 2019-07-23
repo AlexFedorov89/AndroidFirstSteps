@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    tools:layout_editor_absoluteY="81dp">
+    tools:context=".WeatherScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,23 +13,10 @@
         android:gravity="center|top"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/btnSettings"
-                style="@style/Widget.AppCompat.ImageButton"
-                android:layout_width="71dp"
-                android:layout_height="71dp"
-                app:srcCompat="@android:drawable/ic_menu_manage" />
-        </LinearLayout>
-
         <ImageView
             android:id="@+id/weatherImage"
             android:layout_width="match_parent"
-            android:layout_height="314dp"
+            android:layout_height="250dp"
             android:contentDescription="Image of weather"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/sunny" />
@@ -43,11 +28,11 @@
             android:text="@string/temperature"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="70sp" />
+            android:textSize="50sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="98dp">
+            android:layout_height="92dp">
 
             <Button
                 android:id="@+id/sun_small"
@@ -118,7 +103,6 @@
             android:text="@string/city"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="50sp" />
+            android:textSize="36sp" />
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
