@@ -7,34 +7,44 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static android.content.Intent.ACTION_VIEW;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements Observer, PublishGetter {
 
     private Fragment mCurrentFragment;
 
-    public final static String CITY = "CITY";
+    public final static String CITY = "city";
 
     private static final String TAG = "myLogs";
 
     private final static DataCache dataCache = DataCache.getDataCache();
     public static final int REQUEST_CODE = 1;
 
+    private Publisher publisher = new Publisher();
+
     TextView temperature;
     ImageView weatherImage;
     TextView cityView;
 
-    String currentCity;
+    private String currentCity;
+    private String currentTemp;
+    private int currentImgRes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Подпишем себя.
+        publisher.subscribe(this);
 
         cityView = findViewById(R.id.city);
         temperature = findViewById(R.id.temperature);
@@ -65,35 +75,87 @@ public class MainActivity extends AppCompatActivity {
 
     private void setButtonsOnClickListener() {
 
-
-//        findViewById(R.id.sun_small).setOnClickListener(onClickListener);
-//        findViewById(R.id.cloud_small).setOnClickListener(onClickListener);
-//        findViewById(R.id.rain_small).setOnClickListener(onClickListener);
-//        findViewById(R.id.snow_small).setOnClickListener(onClickListener);
-
         findViewById(R.id.btnSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pushButtonSettings(view);
+                if (!isCurrentFragIsSettings()) {
+                    changeFragment();
+                }
             }
         });
-//        findViewById(R.id.city).setOnClickListener(onClickListener);
+
+        findViewById(R.id.sun_small).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentTemp = "+35";
+                currentImgRes = R.drawable.sunny;
+                dataCache.setTemp(currentTemp);
+                dataCache.setImageRes(currentImgRes);
+
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+            }
+        });
+
+        findViewById(R.id.cloud_small).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentTemp = "+21";
+                currentImgRes = R.drawable.cloud;
+                dataCache.setTemp(currentTemp);
+                dataCache.setImageRes(currentImgRes);
+
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+            }
+        });
+
+        findViewById(R.id.rain_small).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentTemp = "+15";
+                currentImgRes = R.drawable.rain;
+                dataCache.setTemp(currentTemp);
+                dataCache.setImageRes(currentImgRes);
+
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+
+            }
+        });
+
+        findViewById(R.id.snow_small).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentTemp = "-25";
+                currentImgRes = R.drawable.snow;
+                dataCache.setTemp(currentTemp);
+                dataCache.setImageRes(currentImgRes);
+
+                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
+
+            }
+        });
+
+        findViewById(R.id.city).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    currentCity = cityView.getText().toString();
+                    Intent intent = new Intent(ACTION_VIEW, Uri.parse("https://ru.wikipedia.org/wiki/" + currentCity));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.d(TAG, e.getMessage());
+                }
+            }
+        });
     }
 
-    private void pushButtonSettings(View view) {
-        changeFragment();
-    }
 
     private void changeFragment() {
-        if (isCurrentFragIsSettings()) {
-            mCurrentFragment = new WeatherScreen();
-        } else {
-            mCurrentFragment = new Settings();
-        }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, mCurrentFragment);
+        mCurrentFragment = Settings.newInstance(cityView.getText().toString());
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment, mCurrentFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -101,78 +163,18 @@ public class MainActivity extends AppCompatActivity {
         return mCurrentFragment instanceof Settings;
     }
 
+
     @Override
     public void onBackPressed() {
         if (isCurrentFragIsSettings()) {
-            changeFragment();
-        } else {
-            super.onBackPressed();
-        }
-    }
 
-    public void pushTheButton(View view) {
-//        String currentTemp;
-//        int currentImgRes;
-//
-//        switch (view.getId()) {
-//            case R.id.city:
-//                try {
-//                    currentCity = cityView.getText().toString();
-//                    Intent intent = new Intent(ACTION_VIEW, Uri.parse("https://ru.wikipedia.org/wiki/" + currentCity));
-//                    startActivity(intent);
-//                } catch (Exception e) {
-//                    Log.d(TAG, e.getMessage());
-//                }
-//
-//                break;
-//            case R.id.sun_small:
-//                currentTemp = "+35";
-//                currentImgRes = R.drawable.sunny;
-//                dataCache.setTemp(currentTemp);
-//                dataCache.setImageRes(currentImgRes);
-//
-//                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
-//
-//                break;
-//            case R.id.cloud_small:
-//                currentTemp = "+21";
-//                currentImgRes = R.drawable.cloud;
-//                dataCache.setTemp(currentTemp);
-//                dataCache.setImageRes(currentImgRes);
-//
-//                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
-//
-//                break;
-//
-//            case R.id.rain_small:
-//                currentTemp = "+15";
-//                currentImgRes = R.drawable.rain;
-//                dataCache.setTemp(currentTemp);
-//                dataCache.setImageRes(currentImgRes);
-//
-//                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
-//
-//                break;
-//
-//            case R.id.snow_small:
-//                currentTemp = "-25";
-//                currentImgRes = R.drawable.snow;
-//                dataCache.setTemp(currentTemp);
-//                dataCache.setImageRes(currentImgRes);
-//
-//                setWeather(temperature, weatherImage, currentTemp, currentImgRes);
-//
-//                break;
-//
-//            case R.id.btnSettings:
-//                Intent cityScreenIntent = new Intent(this, CityScreen.class);
-//
-//                currentCity = cityView.getText().toString();
-//
-//                cityScreenIntent.putExtra(CITY, currentCity);
-//                // запуск activity
-//                startActivityForResult(cityScreenIntent, REQUEST_CODE);
-//        }
+            TextView cityInput = findViewById(R.id.cityInput);
+            cityView.setText(cityInput.getText().toString());
+
+            mCurrentFragment = null;
+        }
+
+        super.onBackPressed();
     }
 
     public static void setWeather(TextView temperature, ImageView weatherImage, String temp, int imageResource) {
@@ -189,25 +191,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode != REQUEST_CODE) {
-            super.onActivityResult(requestCode, resultCode, data);
-
-            return;
-        }
-
-        if (resultCode == RESULT_OK && data != null) {
-            try {
-                String city = data.getStringExtra(CITY);
-
-                cityView.setText(city);
-                dataCache.setCity(city);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
+    public Publisher getPublisher() {
+        return publisher;
     }
 
+    @Override
+    public void updateCity(String city) {
+        cityView.setText(city);
+    }
 }

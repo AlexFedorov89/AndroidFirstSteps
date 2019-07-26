@@ -36,6 +36,7 @@ public class WeatherScreen extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             mCurrentTemp = getArguments().getString(CURRENT_TEMP);
             mCurrentCity = getArguments().getString(CURRENT_CITY);
