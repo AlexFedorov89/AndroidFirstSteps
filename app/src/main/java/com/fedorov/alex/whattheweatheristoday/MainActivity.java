@@ -17,22 +17,17 @@ import android.widget.TextView;
 import static android.content.Intent.ACTION_VIEW;
 
 
-public class MainActivity extends AppCompatActivity implements Observer, PublishGetter {
+public class MainActivity extends AppCompatActivity implements Observer {
 
     private Fragment mCurrentFragment;
-
-    public final static String CITY = "city";
 
     private static final String TAG = "myLogs";
 
     private final static DataCache dataCache = DataCache.getDataCache();
-    public static final int REQUEST_CODE = 1;
 
-    private Publisher publisher = new Publisher();
-
-    TextView temperature;
-    ImageView weatherImage;
-    TextView cityView;
+    private TextView temperature;
+    private ImageView weatherImage;
+    private TextView cityView;
 
     private String currentCity;
     private String currentTemp;
@@ -42,9 +37,6 @@ public class MainActivity extends AppCompatActivity implements Observer, Publish
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Подпишем себя.
-        publisher.subscribe(this);
 
         cityView = findViewById(R.id.city);
         temperature = findViewById(R.id.temperature);
@@ -148,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements Observer, Publish
         });
     }
 
-
     private void changeFragment() {
 
         mCurrentFragment = Settings.newInstance(cityView.getText().toString());
@@ -166,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements Observer, Publish
 
     @Override
     public void onBackPressed() {
+
         if (isCurrentFragIsSettings()) {
 
             TextView cityInput = findViewById(R.id.cityInput);
@@ -189,10 +181,6 @@ public class MainActivity extends AppCompatActivity implements Observer, Publish
         } else {
             Log.d(TAG, "Error. Not found ImageView with id = 'weatherImage'");
         }
-    }
-
-    public Publisher getPublisher() {
-        return publisher;
     }
 
     @Override
