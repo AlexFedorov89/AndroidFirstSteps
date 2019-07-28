@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Show me the weather</string>
+    <string name="temperature">+30</string>
+    <string name="city">Saint-Petersburg</string>
+    <string name="enterCity">Enter name of the city...</string>
+    <string name="cityHint">Get info on wiki</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Settings</string>
+
+</resources>

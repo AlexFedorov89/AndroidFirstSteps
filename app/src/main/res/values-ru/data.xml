@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities">
+        <item>Санкт-Петерург</item>
+        <item>Москва</item>
+        <item>Екатеринбург</item>
+        <item>Иваново</item>
+    </string-array>
+
+    <string-array name="temperature">
+        <item>+31</item>
+        <item>+27</item>
+        <item>+20</item>
+        <item>+12</item>
+    </string-array>
+</resources>
