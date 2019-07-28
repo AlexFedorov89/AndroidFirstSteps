@@ -32,7 +32,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="92dp">
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
 
             <Button
                 android:id="@+id/sun_small"
@@ -104,5 +105,10 @@
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="36sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/citiesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </FrameLayout>
